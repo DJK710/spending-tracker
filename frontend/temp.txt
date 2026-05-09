@@ -1,0 +1,32 @@
+function TransactionList({transactions, onDelete, onEdit}) {
+    if (!transactions || transactions.length === 0) {
+        return <p>No transactions yet.</p>;
+    }
+    return (
+        <div>
+            <ul className="transaction-list">
+                {transactions.map(t => (
+                <li className="transaction-card" key={t.id}>
+                    <div className="transaction-info">
+                        <strong>€{t.amount}</strong>
+                        <span>{t.type}</span>
+                        <p>{t.description}</p>
+                    </div>
+
+                    <div className="transaction-actions">
+                        <button type="button" onClick={()=> onEdit(t)}>
+                            Edit
+                        </button>
+
+                        <button type="button" onClick={()=> onDelete(t.id)}>
+                            Delete
+                        </button>
+                    </div>
+                </li>
+                ))}
+            </ul>
+        </div>
+    )
+}
+
+export default TransactionList;

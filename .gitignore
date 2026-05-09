@@ -1,0 +1,14 @@
+#Default
+node_modules/
+.env
+backend/.env
+dist/
+build/
+.DS_Store
+
+#Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env

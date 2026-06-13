@@ -12,7 +12,12 @@ app.include_router(ai.router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:8082",
+        "http://192.168.178.71:8082",
+        "https://spending.dylanvdk.dev",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

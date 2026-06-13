@@ -1,15 +1,52 @@
-#Default
+# =========================
+# Node / React
+# =========================
 node_modules/
-.env
-backend/.env
 dist/
 build/
-.DS_Store
 
-#Python
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.*
+backend/.env
+frontend/.env
+
+# =========================
+# Python
+# =========================
 venv/
 .venv/
 __pycache__/
 *.pyc
-.env
-backend/data
+*.pyo
+*.pyd
+
+# =========================
+# Local Data
+# =========================
+backend/data/
+*.sqlite
+*.db
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Docker
+# =========================
+postgres_data/

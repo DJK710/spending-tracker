@@ -61,8 +61,8 @@ function App() {
           </div>
 
           <div className="transaction-list">
-            <h1>Transactions</h1>
             <AIInsights />
+            <h1>Transactions</h1>
             <TransactionList
               transactions={transactions}
               onDelete={deleteTransaction}

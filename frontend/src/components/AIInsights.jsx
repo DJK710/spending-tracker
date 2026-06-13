@@ -40,7 +40,7 @@ function AIInsights() {
       };
 
       const response = await axios.post(
-        "http://localhost:8000/ai/analyze",
+        "http://localhost:8001/ai/analyze",
         payload
       );
 

@@ -87,11 +87,11 @@ function TransactionList({ transactions, onEdit, onDelete }) {
             <p>{transaction.type}</p>
             <p>{transaction.transaction_date}</p>
             <div className="transaction-actions">
-                <button type="button" onClick={()=> onEdit(t)}>
+                <button type="button" onClick={()=> onEdit(transaction)}>
                     Edit
                 </button>
 
-                <button type="button" onClick={()=> onDelete(t.id)}>
+                <button type="button" onClick={()=> onDelete(transaction.id)}>
                     Delete
                 </button>
             </div>

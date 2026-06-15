@@ -4,7 +4,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: CHANGE_THIS_PASSWORD
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: spending_tracker
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -17,8 +17,8 @@ services:
     ports:
       - "8001:8000"
     environment:
-      DATABASE_URL: postgresql+psycopg://postgres:CHANGE_THIS_PASSWORD@db:5432/spending_tracker
-      OPENAI_API_KEY: YOUR_NEW_OPENAI_KEY
+      DATABASE_URL: postgresql+psycopg://postgres:${POSTGRES_PASSWORD}@db:5432/spending_tracker
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
     depends_on:
       - db
 
@@ -26,6 +26,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.frontend
+      args:
+        VITE_API_URL: https://api.spending.dylanvdk.dev
     restart: unless-stopped
     ports:
       - "8082:80"

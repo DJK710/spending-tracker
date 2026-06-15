@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function TransactionList({ transactions }) {
+function TransactionList({ transactions, onEdit, onDelete }) {
   const [typeFilter, setTypeFilter] = useState("all");
   const [subscriptionFilter, setSubscriptionFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");

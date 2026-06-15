@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import ReactMarkdown from "react-markdown";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8001";
+
 function AIInsights() {
   const [filters, setFilters] = useState({
     type: "All",
@@ -38,9 +40,9 @@ function AIInsights() {
         start_date: filters.start_date || null,
         end_date: filters.end_date || null,
       };
-
+        
       const response = await axios.post(
-        "http://localhost:8001/ai/analyze",
+        `${API_URL}/ai/analyze`,
         payload
       );
 

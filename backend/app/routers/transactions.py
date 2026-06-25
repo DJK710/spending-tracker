@@ -31,20 +31,26 @@ def create_transaction(transaction: schemas.TransactionCreate, db: Session = Dep
     return crud.create_transaction(db, transaction)
 
 @router.post("/import/camt", response_model=schemas.CamtImportResult)
-async def import_camt_file(file: UploadFile = File(...), db: Session = Depends(get_db)):
-    filename = file.filename or ""
+async def import_camt_files(files: list[UploadFile] = File(...), db: Session = Depends(get_db)):
+    camt_files = [
+        file for file in files
+        if (file.filename or "").lower().endswith(".xml")
+    ]
 
-    if not filename.lower().endswith(".xml"):
-        raise HTTPException(status_code=400, detail="Please upload a CAMT XML file.")
+    if not camt_files:
+        raise HTTPException(status_code=400, detail="Please upload a folder with CAMT XML files.")
 
-    temp_path = None
+    temp_paths = []
 
     try:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".xml") as temp_file:
-            temp_path = temp_file.name
-            temp_file.write(await file.read())
+        parsed_transactions = []
 
-        parsed_transactions = parse_camt_file(temp_path)
+        for file in camt_files:
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".xml") as temp_file:
+                temp_paths.append(temp_file.name)
+                temp_file.write(await file.read())
+
+            parsed_transactions.extend(parse_camt_file(temp_paths[-1]))
 
         db_transactions = [
             models.Transaction(
@@ -68,8 +74,9 @@ async def import_camt_file(file: UploadFile = File(...), db: Session = Depends(g
         db.rollback()
         raise HTTPException(status_code=400, detail=f"Could not import CAMT file: {exc}") from exc
     finally:
-        if temp_path and os.path.exists(temp_path):
-            os.remove(temp_path)
+        for temp_path in temp_paths:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
 
 @router.put("/{transaction_id}", response_model=schemas.TransactionRead)
 def update_transaction(

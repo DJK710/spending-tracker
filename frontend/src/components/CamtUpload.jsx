@@ -2,13 +2,17 @@ import { useRef, useState } from "react";
 
 function CamtUpload({ onUpload }) {
   const fileInputRef = useRef(null);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0] || null);
+    const xmlFiles = Array.from(event.target.files || []).filter((file) =>
+      file.name.toLowerCase().endsWith(".xml")
+    );
+
+    setSelectedFiles(xmlFiles);
     setMessage("");
     setError("");
   };
@@ -16,8 +20,8 @@ function CamtUpload({ onUpload }) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!selectedFile) {
-      setError("Choose a CAMT XML file first.");
+    if (selectedFiles.length === 0) {
+      setError("Choose a folder that contains CAMT XML files first.");
       return;
     }
 
@@ -26,9 +30,10 @@ function CamtUpload({ onUpload }) {
     setError("");
 
     try {
-      const importedCount = await onUpload(selectedFile);
-      setMessage(`Imported ${importedCount} transactions from ${selectedFile.name}.`);
-      setSelectedFile(null);
+      const importedCount = await onUpload(selectedFiles);
+      const fileLabel = selectedFiles.length === 1 ? "file" : "files";
+      setMessage(`Imported ${importedCount} transactions from ${selectedFiles.length} ${fileLabel}.`);
+      setSelectedFiles([]);
 
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -44,8 +49,8 @@ function CamtUpload({ onUpload }) {
   return (
     <form className="camt-upload" onSubmit={handleSubmit}>
       <div>
-        <h2>Import CAMT File</h2>
-        <p>Upload a CAMT XML export from your bank to add its transactions.</p>
+        <h2>Import CAMT Folder</h2>
+        <p>Upload a folder of CAMT XML exports from your bank to add its transactions.</p>
       </div>
 
       <div className="camt-upload-controls">
@@ -54,11 +59,16 @@ function CamtUpload({ onUpload }) {
           id="camt-file"
           type="file"
           accept=".xml,text/xml,application/xml"
+          multiple
+          directory=""
+          webkitdirectory=""
           onChange={handleFileChange}
         />
 
         <label className="file-picker-button" htmlFor="camt-file">
-          {selectedFile ? selectedFile.name : "Choose CAMT file"}
+          {selectedFiles.length > 0
+            ? `${selectedFiles.length} CAMT files selected`
+            : "Choose CAMT folder"}
         </label>
 
         <button type="submit" disabled={isUploading}>

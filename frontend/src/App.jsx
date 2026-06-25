@@ -33,9 +33,12 @@ function App() {
     setEditingTransaction(null);
   };
 
-  const uploadCamtFile = async (file) => {
+  const uploadCamtFiles = async (files) => {
     const formData = new FormData();
-    formData.append("file", file);
+
+    files.forEach((file) => {
+      formData.append("files", file);
+    });
 
     const res = await api.post("/transactions/import/camt", formData);
 
@@ -72,7 +75,7 @@ function App() {
           </div>
 
           <div className="card">
-            <CamtUpload onUpload={uploadCamtFile} />
+            <CamtUpload onUpload={uploadCamtFiles} />
           </div>
 
           <div className="transaction-list">

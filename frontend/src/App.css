@@ -122,6 +122,67 @@ button:hover {
   background: #4338ca;
 }
 
+button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.camt-upload {
+  display: grid;
+  gap: 16px;
+}
+
+.camt-upload h2,
+.camt-upload p {
+  margin: 0;
+}
+
+.camt-upload p {
+  color: var(--muted);
+}
+
+.camt-upload-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.camt-upload input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.file-picker-button {
+  min-width: 190px;
+  max-width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg-soft);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-picker-button:hover {
+  border-color: var(--accent);
+}
+
+.upload-message {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .transaction-list {
   display: grid;
   gap: 12px;

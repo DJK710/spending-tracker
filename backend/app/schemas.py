@@ -27,3 +27,7 @@ class TransactionRead(TransactionBase):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class CamtImportResult(BaseModel):
+    imported_count: int

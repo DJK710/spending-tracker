@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import TransactionForm from "./components/TransactionForm.jsx";
 import TransactionList from "./components/TransactionList.jsx";
+import CamtUpload from "./components/CamtUpload.jsx";
 import StatsPage from "./pages/StatsPage.jsx";
 import AIInsights from "./components/AIInsights";
 import api from "./api";
@@ -32,6 +33,16 @@ function App() {
     setEditingTransaction(null);
   };
 
+  const uploadCamtFile = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const res = await api.post("/transactions/import/camt", formData);
+
+    await fetchTransactions();
+    return res.data.imported_count;
+  };
+
   useEffect(() => {
     fetchTransactions();
   }, []);
@@ -58,6 +69,10 @@ function App() {
                 editingTransaction={editingTransaction}
               />
             </div>
+          </div>
+
+          <div className="card">
+            <CamtUpload onUpload={uploadCamtFile} />
           </div>
 
           <div className="transaction-list">

@@ -1,8 +1,10 @@
 from datetime import date
 from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -13,6 +15,8 @@ router = APIRouter(
     prefix="/ai",
     tags=["AI"],
 )
+
+limiter = Limiter(key_func=get_remote_address)
 
 
 class AIAnalyzeFilters(BaseModel):
@@ -25,7 +29,9 @@ class AIAnalyzeFilters(BaseModel):
 
 
 @router.post("/analyze")
+@limiter.limit("5/minute")
 def analyze_spending(
+    request: Request,
     filters: AIAnalyzeFilters,
     db: Session = Depends(get_db),
 ):

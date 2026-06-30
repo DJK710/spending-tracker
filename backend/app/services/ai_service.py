@@ -1,8 +1,5 @@
 import os
 from openai import OpenAI # type: ignore
-from dotenv import load_dotenv # type: ignore
-
-load_dotenv()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 

@@ -1,11 +1,12 @@
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from .database import Base, engine
 from .routers import transactions, ai
+from .dependencies import require_auth
 from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(dependencies=[Depends(require_auth)])
 
 app.include_router(transactions.router)
 app.include_router(ai.router)

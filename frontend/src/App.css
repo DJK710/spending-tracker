@@ -458,3 +458,88 @@ select {
   color: #dc2626;
   font-weight: 600;
 }
+
+.rules-page,
+.recurring-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.rule-form-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.rules-reapply {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.rules-reapply p {
+  color: var(--muted);
+  margin: 4px 0 0;
+}
+
+.rule-list,
+.recurring-list {
+  display: grid;
+  gap: 12px;
+}
+
+.rule-card,
+.recurring-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(94, 234, 212, 0.16),
+    rgba(96, 165, 250, 0.15)
+  );
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.rule-info,
+.recurring-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rule-info p,
+.recurring-info p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.rule-actions,
+.recurring-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.rule-actions button,
+.recurring-actions button {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+.recurring-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recurring-summary strong {
+  font-size: 28px;
+}

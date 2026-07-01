@@ -3,6 +3,8 @@ import TransactionForm from "./components/TransactionForm.jsx";
 import TransactionList from "./components/TransactionList.jsx";
 import CamtUpload from "./components/CamtUpload.jsx";
 import StatsPage from "./pages/StatsPage.jsx";
+import CategorizationRulesPage from "./pages/CategorizationRulesPage.jsx";
+import RecurringPage from "./pages/RecurringPage.jsx";
 import AIInsights from "./components/AIInsights";
 import api from "./api";
 import "./App.css";
@@ -58,6 +60,10 @@ function App() {
         </button>
 
         <button onClick={() => setCurrentPage("stats")}>Stats</button>
+
+        <button onClick={() => setCurrentPage("rules")}>Rules</button>
+
+        <button onClick={() => setCurrentPage("recurring")}>Recurring</button>
       </nav>
 
       {currentPage === "transactions" && (
@@ -94,6 +100,20 @@ function App() {
         <>
           <h1>Stats</h1>
           <StatsPage transactions={transactions} />
+        </>
+      )}
+
+      {currentPage === "rules" && (
+        <>
+          <h1>Categorization Rules</h1>
+          <CategorizationRulesPage onTransactionsChanged={fetchTransactions} />
+        </>
+      )}
+
+      {currentPage === "recurring" && (
+        <>
+          <h1>Recurring</h1>
+          <RecurringPage onTransactionsChanged={fetchTransactions} />
         </>
       )}
     </div>

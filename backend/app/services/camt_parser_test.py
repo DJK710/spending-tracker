@@ -5,12 +5,10 @@ count = 0
 
 for transaction in transactions:
     for entry in transaction:
-        
-        if entry["type"] == "Donation":
+
+        if entry["transaction_date"] is None:
             print(entry)
             count += 1
-    #transaction[0]["transaction_date"] == "Unknown" or
-    
 
 
 print(f"Amount of Unknown's = {count}")

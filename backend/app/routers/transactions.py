@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from .. import crud, models, schemas
 from ..database import get_db
 from ..services.camt_parser import parse_camt_file
+from ..services.categorization import categorize_parsed_transaction
 
 router = APIRouter(
     prefix="/transactions",
@@ -52,15 +53,20 @@ async def import_camt_files(files: list[UploadFile] = File(...), db: Session = D
 
             parsed_transactions.extend(parse_camt_file(temp_paths[-1]))
 
+        rules = crud.get_categorization_rules(db, active_only=True)
+
         db_transactions = [
             models.Transaction(
-                amount=transaction["amount"],
-                type=transaction["type"],
-                description=transaction["description"],
-                is_subscription=transaction["is_subscription"],
-                transaction_date=transaction["transaction_date"],
+                amount=categorized["amount"],
+                type=categorized["type"],
+                description=categorized["description"],
+                is_subscription=categorized["is_subscription"],
+                transaction_date=categorized["transaction_date"],
             )
-            for transaction in parsed_transactions
+            for categorized in (
+                categorize_parsed_transaction(transaction, rules)
+                for transaction in parsed_transactions
+            )
         ]
 
         db.add_all(db_transactions)
@@ -99,3 +105,9 @@ def delete_transaction(transaction_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Transaction not found")
 
     return deleted_transaction
+
+@router.post("/bulk-subscription-flag", response_model=schemas.BulkUpdateResult)
+def bulk_subscription_flag(request: schemas.BulkSubscriptionUpdate, db: Session = Depends(get_db)):
+    updated_count = crud.bulk_update_is_subscription(db, request.transaction_ids, request.is_subscription)
+
+    return schemas.BulkUpdateResult(updated_count=updated_count)

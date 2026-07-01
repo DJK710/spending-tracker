@@ -3,11 +3,13 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from .database import Base, engine
-from .routers import transactions, ai
+from .routers import transactions, ai, categorization_rules, recurring
 from .dependencies import require_auth
+from .seed import seed_categorization_rules_if_empty
 from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
+seed_categorization_rules_if_empty()
 
 limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(dependencies=[Depends(require_auth)])
@@ -16,6 +18,8 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.include_router(transactions.router)
 app.include_router(ai.router)
+app.include_router(categorization_rules.router)
+app.include_router(recurring.router)
 
 app.add_middleware(
     CORSMiddleware,
